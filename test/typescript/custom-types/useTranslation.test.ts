@@ -109,3 +109,20 @@ describe('useTranslation', () => {
     expectTypeOf(t('foo_one')).toEqualTypeOf<'foo'>();
   });
 });
+
+/**
+ * The current behavior of `useTranslation` is to not raise a TypeError
+ * if the user chooses a different namespace than the ones provided when
+ * they called `useTranslation`.
+ *
+ * Reference:
+ *
+ * https://github.com/i18next/react-i18next/pull/1852#discussion_r2256990517
+ */
+
+const { t } = useTranslation(['alternate']);
+
+const x = t('beverage', { ns: 'context' });
+//    ^? const x: "beverage"
+const y = t('bar', { ns: 'custom' });
+//    ^? const y: "bar"
